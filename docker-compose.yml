@@ -5,7 +5,7 @@ services:
     container_name: tracking_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password_kamu # Sesuaikan dengan isi .env
+      MYSQL_ROOT_PASSWORD: password_kamu
       MYSQL_DATABASE: db_tracking
     ports:
       - "3306:3306"

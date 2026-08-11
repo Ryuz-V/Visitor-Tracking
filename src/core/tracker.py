@@ -28,23 +28,15 @@ class PeopleTracker:
             tracker="bytetrack.yaml", 
             verbose=False
         )[0]
-        
-        # Konversi ke format Supervision
         detections = sv.Detections.from_ultralytics(results)
-        
-        # 2. FILTERING UNTUK GARIS (Hanya menghitung manusia)
-        # class_id 0 pada YOLO adalah 'person'
+        if results.boxes.id is not None:
+            detections.tracker_id = results.boxes.id.cpu().numpy().astype(int)
         human_detections = detections[detections.class_id == 0]
-        
-        # Trigger garis hanya menggunakan data manusia
         self.line_zone.trigger(detections=human_detections)
-        
-        # Hitung selisih pengunjung masuk
         current_in = self.line_zone.in_count
         new_in = current_in - self.prev_in_count
         self.prev_in_count = current_in
-        
-        # 3. LOGIKA PELABELAN KOTAK (Visitor vs Anomali)
+
         labels = []
         for i in range(len(detections)):
             class_id = detections.class_id[i]
