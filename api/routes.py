@@ -2,20 +2,21 @@ from fastapi import FastAPI, HTTPException
 import mysql.connector
 from datetime import date
 
+from src.config.settings import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
+
 app = FastAPI(
     title="People Counting API",
     description="API untuk mengambil data statistik pengunjung harian dari sistem Human Tracking.",
     version="1.0.0"
 )
 
-# Konfigurasi koneksi database (bisa disesuaikan dengan .env nantinya)
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="password_kamu",
-            database="db_tracking"
+            host=DB_HOST,       
+            user=DB_USER,         
+            password=DB_PASSWORD, 
+            database=DB_NAME      
         )
         return connection
     except mysql.connector.Error as err:
